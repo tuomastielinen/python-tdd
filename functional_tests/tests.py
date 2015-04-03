@@ -58,8 +58,8 @@ class NewVisitorTest(LiveServerTestCase):
 
     # Now a new user, Francis, comes along to the site.
 
-    ## We use a new browser session to make sure that no information
-    ## of Edith's is coming through from cookies etc
+    # We use a new browser session to make sure that no information
+    # of Edith's is coming through from cookies etc
     self.browser.quit()
     self.browser = webdriver.Firefox()
 
@@ -88,8 +88,26 @@ class NewVisitorTest(LiveServerTestCase):
 
     # Satisfied, they both go back to sleep
 
-    self.fail('Finish the test!')
+  def test_layout_and_styling(self):
+    # Edith goes to the home page
+    self.browser.get(self.live_server_url)
+    self.browser.set_window_size(1024, 768)
 
-    # She visits that URL - her to-do list is still there.
+    # She notices the input box is nicely centered
+    inputbox = self.browser.find_element_by_id('id_new_item')
+    self.assertAlmostEqual(
+        inputbox.location['x'] + inputbox.size['width'] / 2,
+        512,
+        delta=5
+    )
 
-    # Satisfied, she goes back to sleep
+    # She starts a new list and sees the input is nicely
+    # centered there too
+    inputbox.send_keys('testing\n')
+    inputbox = self.browser.find_element_by_id('id_new_item')
+    self.assertAlmostEqual(
+    inputbox.location['x'] + inputbox.size['width'] / 2,
+    512,
+    delta=5
+    )
+    
